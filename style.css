@@ -1,0 +1,275 @@
+/* Reset and base styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Vazir', sans-serif;
+    background: linear-gradient(135deg, #f6f6f7 0%, #fbfbfb 100%);
+    color: #444;
+    direction: rtl;
+    text-align: center;
+    line-height: 1.6;
+    padding: 16px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Card styles */
+.card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(16, 24, 40, 0.06);
+    padding: 24px;
+    max-width: 100%;
+    width: 100%;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(16, 24, 40, 0.12);
+}
+
+/* Profile section */
+.profile-section {
+    margin-bottom: 32px;
+}
+
+.profile-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 16px;
+    display: block;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+/* Contact section */
+.contact-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.contact-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #4db8e6 0%, #0095da 100%);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+    min-width: 80px;
+    min-height: 80px;
+    justify-content: center;
+}
+
+.contact-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(16, 24, 40, 0.12);
+    background: linear-gradient(135deg, #3a9cc8 0%, #007bb8 100%);
+}
+
+.contact-btn:active {
+    transform: translateY(-2px);
+}
+
+.contact-btn:focus {
+    outline: 3px solid #0095da;
+    outline-offset: 2px;
+}
+
+.contact-btn svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 8px;
+}
+
+.contact-btn span {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Card footer */
+.card-footer {
+    font-size: 14px;
+    color: #666;
+}
+
+.card-footer a {
+    color: #0095da;
+    text-decoration: none;
+}
+
+.card-footer a:hover {
+    text-decoration: underline;
+}
+
+.card-footer svg {
+    width: 50px;
+    height: auto;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 599px) {
+    .contact-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .contact-btn {
+        width: 100%;
+        max-width: 280px;
+        flex-direction: row;
+        align-items: center;
+        padding: 20px 24px;
+        position: relative;
+        min-height: 60px;
+    }
+
+    .contact-btn span {
+        position: absolute;
+        left: 24px;
+        right: 64px;
+        text-align: center;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .contact-btn svg {
+        position: absolute;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (min-width: 600px) {
+    body {
+        padding: 32px;
+    }
+
+    .card {
+        max-width: 480px;
+        padding: 32px;
+    }
+
+    .profile-img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+    }
+
+    .contact-btn {
+        min-width: 100px;
+        min-height: 100px;
+        padding: 20px;
+    }
+
+    .contact-btn svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .contact-btn span {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 900px) {
+    .card {
+        max-width: 720px;
+        padding: 40px;
+    }
+
+    .profile-img {
+        width: 280px;
+        height: 280px;
+        object-fit: cover;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    .subtitle {
+        font-size: 20px;
+    }
+
+    .contact-section {
+        gap: 16px;
+    }
+
+    .contact-btn {
+        min-width: 120px;
+        min-height: 120px;
+        padding: 24px;
+    }
+
+    .contact-btn svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .contact-btn span {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card {
+        max-width: 900px;
+    }
+
+    .profile-img {
+        width: 210px;
+        height: 210px;
+        object-fit: cover;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+
+    .subtitle {
+        font-size: 22px;
+    }
+}
