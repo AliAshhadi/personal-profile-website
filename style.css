@@ -5,10 +5,42 @@
     padding: 0;
 }
 
+:root {
+    --bg-gradient-start: #f6f6f7;
+    --bg-gradient-end: #fbfbfb;
+    --card-bg: #ffffff;
+    --text-color: #444;
+    --subtitle-color: #666;
+    --accent-start: #4db8e6;
+    --accent-end: #0095da;
+    --accent-hover-start: #3a9cc8;
+    --accent-hover-end: #007bb8;
+    --shadow: rgba(16, 24, 40, 0.06);
+    --shadow-hover: rgba(16, 24, 40, 0.12);
+    --footer-color: #666;
+    --link-color: #0095da;
+}
+
+.dark-mode {
+    --bg-gradient-start: #1a1a1a;
+    --bg-gradient-end: #2d2d2d;
+    --card-bg: #333333;
+    --text-color: #ffffff;
+    --subtitle-color: #cccccc;
+    --accent-start: #5a9bd4;
+    --accent-end: #2e7bc8;
+    --accent-hover-start: #4a8ac0;
+    --accent-hover-end: #2565a0;
+    --shadow: rgba(0, 0, 0, 0.2);
+    --shadow-hover: rgba(0, 0, 0, 0.4);
+    --footer-color: #cccccc;
+    --link-color: #5a9bd4;
+}
+
 body {
     font-family: 'Vazir', sans-serif;
-    background: linear-gradient(135deg, #f6f6f7 0%, #fbfbfb 100%);
-    color: #444;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    color: var(--text-color);
     direction: rtl;
     text-align: center;
     line-height: 1.6;
@@ -17,22 +49,24 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Card styles */
 .card {
-    background: #ffffff;
+    background: var(--card-bg);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(16, 24, 40, 0.06);
+    box-shadow: 0 4px 20px var(--shadow);
     padding: 24px;
     max-width: 100%;
     width: 100%;
     transition: transform 0.18s ease, box-shadow 0.18s ease;
+    position: relative;
 }
 
 .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(16, 24, 40, 0.12);
+    box-shadow: 0 8px 32px var(--shadow-hover);
 }
 
 /* Profile section */
@@ -53,12 +87,12 @@ h1 {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 8px;
-    color: #444;
+    color: var(--text-color);
 }
 
 .subtitle {
     font-size: 16px;
-    color: #666;
+    color: var(--subtitle-color);
     margin-bottom: 4px;
 }
 
@@ -76,11 +110,11 @@ h1 {
     flex-direction: column;
     align-items: center;
     padding: 16px;
-    background: linear-gradient(135deg, #4db8e6 0%, #0095da 100%);
+    background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
     color: #ffffff;
     text-decoration: none;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
+    box-shadow: 0 2px 8px var(--shadow);
     transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
     min-width: 80px;
     min-height: 80px;
@@ -89,8 +123,8 @@ h1 {
 
 .contact-btn:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(16, 24, 40, 0.12);
-    background: linear-gradient(135deg, #3a9cc8 0%, #007bb8 100%);
+    box-shadow: 0 4px 16px var(--shadow-hover);
+    background: linear-gradient(135deg, var(--accent-hover-start) 0%, var(--accent-hover-end) 100%);
 }
 
 .contact-btn:active {
@@ -116,11 +150,11 @@ h1 {
 /* Card footer */
 .card-footer {
     font-size: 14px;
-    color: #666;
+    color: var(--footer-color);
 }
 
 .card-footer a {
-    color: #0095da;
+    color: var(--link-color);
     text-decoration: none;
 }
 
@@ -133,6 +167,52 @@ h1 {
     height: auto;
     vertical-align: middle;
     margin-left: 4px;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--card-bg);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--shadow);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px var(--shadow-hover);
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    color: var(--text-color);
+}
+
+.sun-icon {
+    display: block;
+}
+
+.moon-icon {
+    display: none;
+}
+
+.dark-mode .sun-icon {
+    display: none;
+}
+
+.dark-mode .moon-icon {
+    display: block;
 }
 
 /* Responsive breakpoints */

@@ -3,14 +3,18 @@
 # Architecture Document — Personal Profile Website Template
 
 **Overview:**  
-A reusable single-file, mobile-first personal business profile website template in Persian (Farsi). Plain HTML5 + CSS3 only, RTL layout, accessible, minimal-professional aesthetic, centered card-based design. Designed for easy customization by replacing placeholders with individual data.
+A reusable single-file, mobile-first personal business profile website template in Persian (Farsi). Plain HTML5 + CSS3 + minimal JS only, RTL layout, accessible, minimal-professional aesthetic, centered card-based design with dark mode default and toggle. Designed for easy customization by replacing placeholders with individual data.
 
 **File Structure:**  
-- `index.html` : Main HTML file (UTF-8, `dir="rtl"`, embeds the exact inline SVGs).  
-- `style.css` : Main stylesheet (organized, commented, mobile-first).  
+- `index.html` : Main HTML file (UTF-8, `dir="rtl"`, embeds the exact inline SVGs, includes minimal JS for theme toggle).  
+- `style.css` : Main stylesheet (organized, commented, mobile-first, with CSS variables for theming).  
 - `README.md` : Brief documentation and customization notes.
 
 **Component Breakdown:**  
+- Theme Toggle Button:
+  - Fixed position top-left, circular button with sun/moon icons.
+  - Toggles between light and dark modes using minimal JS.
+  - Default: dark mode.
 - Header:
   - Purpose: optional small top area (kept light/minimal or omitted to emphasize card). Could contain small logo or invisible skip link for accessibility.
 - Main Card (centered):
@@ -47,14 +51,22 @@ A reusable single-file, mobile-first personal business profile website template 
 - Font:
   - Use Vazir CDN: `<link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">`.
   - CSS: `font-family: 'Vazir', sans-serif;` (fallback: system sans).
-- Palette (suggested; used in CSS):
-  - Neutral background: very-light warm gray — `#f6f6f7` or `#fbfbfb`.
-  - Card background: white `#ffffff`.
-  - Accent 1 (primary): Light blue gradient start — `#4db8e6`.
-  - Accent 2: Deep blue accent end — `#0095da`.
-  - Muted text: `#444` for body; secondary text `#666`.
-  - Subtle shadow: `rgba(16, 24, 40, 0.06)` for depth.
-  - Buttons: use accent gradient with hover to darker blue.
+- Palette (suggested; used in CSS with CSS variables for theming):
+  - Light Mode:
+    - Neutral background: very-light warm gray — `#f6f6f7` or `#fbfbfb`.
+    - Card background: white `#ffffff`.
+    - Accent 1 (primary): Light blue gradient start — `#4db8e6`.
+    - Accent 2: Deep blue accent end — `#0095da`.
+    - Muted text: `#444` for body; secondary text `#666`.
+    - Subtle shadow: `rgba(16, 24, 40, 0.06)` for depth.
+  - Dark Mode (default):
+    - Neutral background: dark gray — `#1a1a1a` to `#2d2d2d`.
+    - Card background: darker gray `#333333`.
+    - Accent 1: Adjusted blue `#5a9bd4`.
+    - Accent 2: `#2e7bc8`.
+    - Muted text: `#ffffff`; secondary `#cccccc`.
+    - Subtle shadow: `rgba(0, 0, 0, 0.2)` for depth.
+  - Buttons: use accent gradient with hover to darker shades in both modes.
 - Effects:
   - Subtle glassy gradient on header or page background: diagonal soft gradient using Accent 1->Accent 2 with low opacity.
   - Smooth transitions: `transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;`
@@ -80,8 +92,9 @@ A reusable single-file, mobile-first personal business profile website template 
 - Input or copyable LTR text (like emails and URLs) should be inside `dir="ltr"` or `unicode-bidi: embed` to preserve correct ordering and avoid punctuation issues.
 
 **Performance & Optimizations:**  
-- Keep CSS scoped and minimal — only the classes used.  
+- Keep CSS scoped and minimal — only the classes used, with CSS variables for efficient theming.  
 - Inline SVGs avoid extra HTTP requests for small icons. Since we embed provided SVGs, they render fast and inherit `currentColor`.  
+- Minimal JS for theme toggle (no frameworks).  
 - Use a single small CSS file; avoid heavy gradients or images. Profile image uses `object-fit: cover` for efficient circular display.  
 - Defer any heavy images; compress profile photo if added later.
 
