@@ -370,15 +370,7 @@ function renderRowList() {
         rowTop.appendChild(iconField);
         rowTop.appendChild(actions);
 
-        const rowBottom = document.createElement("div");
-        rowBottom.className = "row-bottom";
-        const slugText = document.createElement("span");
-        slugText.className = "muted";
-        slugText.textContent = `نام ستون: ${slug}`;
-        rowBottom.appendChild(slugText);
-
         card.appendChild(rowTop);
-        card.appendChild(rowBottom);
         rowListEl.appendChild(card);
     });
 }
@@ -621,7 +613,7 @@ function updateBatchSummary() {
     const peopleCount = state.data.batch.people.length;
     const imagesCount = state.data.batch.images.length;
     const parts = [];
-    if (peopleCount) parts.push(`تعداد رکوردهای بارگذاری شده: ${peopleCount}`);
+    if (peopleCount) parts.push(`تعداد رکوردهای بارگذاری‌شده: ${peopleCount}`);
     if (imagesCount) parts.push(`تعداد تصاویر انتخاب‌شده: ${imagesCount}`);
     const message = parts.join(" | ");
     setStatus(batchSummaryEl, message, peopleCount ? "success" : "");
@@ -649,7 +641,7 @@ async function downloadTemplate() {
         const blob = await res.blob();
         downloadBlob(blob, "sample.xlsx");
     } catch (err) {
-        setStatus(batchWarningsEl, "اتصال به سرور برقرار نشد.", "error");
+        setStatus(batchWarningsEl, "امکان اتصال به سرور وجود ندارد.", "error");
     } finally {
         templateBtn.disabled = false;
     }
@@ -717,7 +709,7 @@ async function runExport() {
         return;
     }
     if (state.theme.font === "Custom" && !state.theme.fontFile) {
-        setStatus(exportWarningsEl, "برای فونت سفارشی، فایل فونت را انتخاب کنید.", "error");
+        setStatus(exportWarningsEl, "برای استفاده از فونت سفارشی، فایل فونت را انتخاب کنید.", "error");
         return;
     }
     if (exportBtn) exportBtn.disabled = true;
@@ -753,7 +745,7 @@ async function runExport() {
             try {
                 const warnings = JSON.parse(warningsHeader);
                 if (warnings.length) {
-                    setStatus(exportWarningsEl, `تصاویر یافت نشد: ${warnings.join(" | ")}`, "error");
+                    setStatus(exportWarningsEl, `تصاویر یافت نشدند: ${warnings.join(" | ")}`, "error");
                 } else {
                     setStatus(exportWarningsEl, "خروجی با موفقیت ساخته شد.", "success");
                 }

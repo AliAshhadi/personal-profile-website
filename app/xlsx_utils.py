@@ -13,9 +13,9 @@ def expected_columns(rows: List[dict]) -> List[str]:
         slug = slugify_label(row.get("label", ""), f"row{idx + 1}")
         row_type = row.get("type", "link")
         if row_type in {"phone", "email"}:
-            dynamic_cols.extend([f"{slug}Label", f"{slug}Enabled"])
+            dynamic_cols.append(f"{slug}Label")
         else:
-            dynamic_cols.extend([f"{slug}Href", f"{slug}Label"])
+            dynamic_cols.append(f"{slug}Href")
     return base_cols + dynamic_cols
 
 
@@ -38,15 +38,6 @@ def _clean_text(value) -> str:
     if value is None:
         return ""
     return str(value).strip()
-
-
-def _parse_enabled(value) -> bool:
-    if value is None:
-        return True
-    text = str(value).strip().lower()
-    if text in {"false", "0", "no", "off", "disabled"}:
-        return False
-    return True
 
 
 def parse_workbook(file_stream, rows: List[dict]) -> Tuple[List[dict], List[str]]:
@@ -95,24 +86,19 @@ def parse_workbook(file_stream, rows: List[dict]) -> Tuple[List[dict], List[str]
             row_type = row_def.get("type", "link")
             if row_type in {"phone", "email"}:
                 label = get(f"{slug}Label")
-                enabled_raw = get(f"{slug}Enabled")
-                enabled = _parse_enabled(enabled_raw)
-                if is_missing(label) or not enabled:
+                if is_missing(label):
                     continue
                 value = normalize_phone(label) if row_type == "phone" else label
                 person_rows[slug] = {
                     "value": label,
                     "normalized": value,
-                    "enabled": enabled,
                 }
             else:
                 href = get(f"{slug}Href")
-                label = get(f"{slug}Label") or row_def.get("label", slug)
                 if is_missing(href):
                     continue
                 person_rows[slug] = {
                     "href": href,
-                    "label": label,
                 }
 
         people.append(

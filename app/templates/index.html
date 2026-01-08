@@ -11,7 +11,6 @@
     <div class="app">
         <header class="app-header">
             <div>
-                <p class="eyebrow">اسکلت اولیه</p>
                 <h1>سازنده لینک‌پیج</h1>
                 <p class="muted">طراحی ردیف‌ها، داده‌گذاری و آماده‌سازی خروجی استاتیک</p>
             </div>
@@ -29,16 +28,10 @@
                 <div class="panel-head">
                     <div>
                         <p class="eyebrow">ردیف‌ها</p>
-                        <h2>چیدمان و آیکن ردیف‌ها</h2>
-                        <p class="muted">ترتیب، نوع (تلفن/ایمیل/لینک)، برچسب روی دکمه و آیکن هر ردیف را مشخص کنید.</p>
+                        <h2>چیدمان و آیکن‌های ردیف‌ها</h2>
+                        <p class="muted">ترتیب، نوع (تلفن/ایمیل/لینک)، برچسب دکمه و آیکن هر ردیف را مشخص کنید.</p>
                     </div>
-                    <button id="add-row" class="ghost">+ افزودن ردیف</button>
-                </div>
-                <div class="row-headers">
-                    <span>متن دکمه</span>
-                    <span>نوع</span>
-                    <span>آیکن</span>
-                    <span>عملیات</span>
+                    <button id="add-row" class="ghost">＋ افزودن ردیف</button>
                 </div>
                 <div id="row-list" class="row-list"></div>
             </div>
@@ -50,12 +43,12 @@
                             <p class="eyebrow">کتابخانه آیکن</p>
                             <h2>آیکن‌های پیش‌فرض و جستجو</h2>
                         </div>
-                        <input id="icon-search" class="search" type="search" placeholder="جستجوی نام آیکن">
+                        <input id="icon-search" class="search" type="search" placeholder="جستجوی آیکن بر اساس نام">
                     </div>
                     <div id="icon-grid" class="icon-grid"></div>
                     <div class="field-row">
                         <label for="icon-name">نام آیکن سفارشی</label>
-                        <input id="icon-name" type="text" placeholder="مثلاً bank یا github">
+                        <input id="icon-name" type="text" placeholder="برای مثال: bank یا github">
                     </div>
                     <div class="field-row">
                         <label for="custom-svg">کد SVG</label>
@@ -66,8 +59,8 @@
 
                 <div class="panel">
                     <p class="eyebrow">تنظیمات پیشرفته</p>
-                    <h2>رنگ، گرادینت و تایپوگرافی</h2>
-                    <p class="muted">برای حفظ ظاهر فعلی، تنظیمات پیشرفته را در صورت نیاز تغییر دهید.</p>
+                    <h2>رنگ، گرادیان و تایپوگرافی</h2>
+                    <p class="muted">برای حفظ ظاهر فعلی، تنظیمات پیشرفته را فقط در صورت نیاز تغییر دهید.</p>
 
                     <div class="field-row">
                         <label>حالت پیش‌فرض صفحه</label>
@@ -85,21 +78,21 @@
                         </select>
                     </div>
                     <div id="custom-font-field" class="field-row hidden">
-                        <label for="custom-font">آپلود فونت (ttf/otf/woff)</label>
+                        <label for="custom-font">بارگذاری فونت (ttf/otf/woff)</label>
                         <input id="custom-font" type="file" accept=".ttf,.otf,.woff,.woff2">
                     </div>
 
                     <div class="stack">
                         <button id="reset-colors" class="secondary" type="button">بازنشانی رنگ به حالت پیش‌فرض</button>
                         <div class="field-row">
-                            <label for="accent-style">استایل تاکید</label>
+                            <label for="accent-style">استایل تأکید</label>
                             <select id="accent-style">
-                                <option value="gradient">گرادینت</option>
+                                <option value="gradient">گرادیان</option>
                                 <option value="solid">تک‌رنگ</option>
                             </select>
                         </div>
                         <div id="accent-gradient-field" class="field-row">
-                            <label for="accent-color">رنگ گرادینت</label>
+                            <label for="accent-color">رنگ گرادیان</label>
                             <div class="color-input">
                                 <input id="accent-color" type="color" value="#2e7bc8">
                                 <input class="color-code" data-color-input="accent-color" type="text" value="#2e7bc8">
@@ -185,10 +178,10 @@
             </div>
 
             <div class="panel mode-panel hidden" data-mode="batch">
-                <div class="panel-head">
+                        <div class="panel-head">
                     <div>
                         <p class="eyebrow">گروهی</p>
-                        <h3>ورود فایل .xlsx و پوشه تصاویر</h3>
+                        <h3>بارگذاری فایل .xlsx و پوشه تصاویر</h3>
                     </div>
                     <button id="download-template" class="secondary" type="button">دانلود نمونه اکسل</button>
                 </div>
@@ -202,7 +195,7 @@
                 </div>
                 <div id="batch-summary" class="status hidden"></div>
                 <div id="batch-warnings" class="status error hidden"></div>
-                <p class="muted">نمونه فایل بر اساس ردیف‌های انتخاب‌شده در تب طراحی ساخته می‌شود.</p>
+                <p class="muted">نمونه فایل بر اساس ردیف‌های انتخاب‌شده در تب «طراحی» ساخته می‌شود.</p>
             </div>
 
             <div class="panel mode-panel" data-mode="single">

@@ -16,22 +16,23 @@ A Persian-first web app that generates a single-page, RTL personal/business link
 - No multi-language UI (Persian-first only).
 
 ## Core UX (Current)
-The app has 3 tabs in a single interface (UI skeleton complete, no export yet):
+The app runs as a single-page UI (served by Flask) with 3 tabs and a backend for import/export and icon persistence:
 
 1) Design Tab
-- Row builder first: add/remove/reorder rows, choose row type (`phone`/`email`/`link`), set button label, pick icon via a visual icon picker (searchable), and see the slug that will be used in data imports.
+- Row builder first: add/remove/reorder rows, choose row type (`phone`/`email`/`link`), set button label, pick icon via a visual icon picker (searchable).
 - Icons are SVG code only (inline SVG), no PNG uploads.
-- Built-in icon library with search and preview; users can paste custom SVG and add it to the library (can delete custom icons, not built-in ones).
+- Built-in icon library with search and preview; users can paste custom SVG and add it to the library (can delete custom icons, not built-in ones). Custom icons persist to disk (`app/data/custom_icons.json`) and are fetched via API.
 - Advanced section at the end for theme/colors/font and default mode. If `Custom` font is selected, user can upload a font file to bundle with export.
 
 2) Data Tab
 - Mode toggle: Single vs Batch.
 - Batch mode: `.xlsx` upload, images folder picker, “Download sample” button at top (generated from current row selection).
-- Single mode: base info (name, subtitles, profile image) + per-row value inputs derived from row builder (bound to state, no export yet).
+- Single mode: base info (name, subtitles, profile image) + per-row value inputs derived from row builder.
 
 3) Export Tab
-- Validate inputs and generate output folders.
-- Batch export creates a folder per person with `index.html` and `style.css`.
+- Validate inputs and generate output folders; download comes as a ZIP.
+- Batch export creates a folder per person with `index.html`, `style.css`, and `pic/`.
+- Warnings surface for missing images (also written to `missing.txt` in batch root).
 
 ## Data Model (Minimal Schema)
 The UI edits a single configuration object used for both single and batch generation.
@@ -40,15 +41,10 @@ The UI edits a single configuration object used for both single and batch genera
 {
   "meta": { "language": "fa", "dir": "rtl", "template": "personal-profile-v1" },
   "theme": {
-    "mode": "dark",
     "defaultMode": "dark",
     "font": "Vazir" | "Custom",
-    "fontFile": null, // if Custom, bundle the uploaded font
-    "accent": {
-      "style": "gradient",   // gradient or solid
-      "color": "#2e7bc8",    // used to derive gradient
-      "solidColor": "#2e7bc8"// used when style = solid
-    },
+    "fontFile": null,
+    "accent": { "style": "gradient", "color": "#2e7bc8", "solidColor": "#2e7bc8" },
     "text": {
       "light": { "title": "#444444", "subtitle": "#666666" },
       "dark": { "title": "#ffffff", "subtitle": "#cccccc" }
@@ -64,26 +60,35 @@ The UI edits a single configuration object used for both single and batch genera
     { "id": "r3", "label": "لینکدین", "type": "link", "icon": "linkedin" }
   ],
   "icons": { "phone": "<svg...>", "email": "<svg...>", "website": "<svg...>", ... },
-  "person": { "name": "...", "subtitle1": "...", "subtitle2": "...", "profileImageFile": "profile.png" },
-  "contacts": {
-    "phone": { "enabled": true, "label": "09123456789", "href": "tel:09123456789" },
-    "email": { "enabled": true, "label": "email@example.com", "href": "mailto:email@example.com" },
-    "linkedin": { "label": "لینکدین", "href": "https://www.linkedin.com/" },
-    "whatsapp": { "label": "واتساپ", "href": "https://whatsapp.com" },
-    "telegram": { "label": "تلگرام", "href": "https://t.me/" },
-    "website": { "label": "وب‌سایت", "href": "https://example.com" }
-  },
-  "footer": { "text": "Made by", "linkText": "...", "linkHref": "..." }
+  "data": {
+    "single": {
+      "name": "...",
+      "subtitle1": "...",
+      "subtitle2": "...",
+      "profileImageFile": "profile.png",
+      "rowValues": { "<slug>": "<value>" }
+    },
+    "batch": [
+      {
+        "name": "...",
+        "subtitle1": "...",
+        "subtitle2": "...",
+        "profileImageFile": "profile.png",
+        "rowValues": { "<slug>": { "value": "...", "href?": "...", "label?": "...", "normalized?": "..." } }
+      }
+    ]
+  }
 }
 ```
 
 Notes:
 - Rows are dynamic; each row has `label` (button text), `type` (phone/email/link), and `icon` (key into icon library). Duplicates are allowed (e.g., multiple phones).
-- Phone/email rows can be toggled off in UI; other rows are controlled by row list.
+- Missing row values in batch or single mode are skipped (not rendered for that person).
 - Inline SVG is stored per contact type and injected into the output HTML.
 - Profile images are exported into a `pic/` folder and referenced in HTML as `pic/<profileImageFile>`.
 - Theme fields above are high-level controls; exporter derives the final CSS variables used by the template.
 - If a custom font is provided, bundle the font file with export and inject the @font-face into CSS.
+- Icon store lives server-side: built-ins are static; custom icons are persisted in `app/data/custom_icons.json` and loaded via API.
 
 ## Theme & Color Controls (UI -> CSS Variables)
 The generator should keep the current look by using the same CSS variable approach as the template, but expose safe, high-level controls in the UI.
@@ -120,29 +125,29 @@ Notes:
 ## Icon Library
 - The program ships with a built-in icon library file (SVG-only) that the UI can search and insert from.
 - Row selection must not delete icons; it only changes which rows are rendered.
-- Users can add their own SVG icons to a custom library (persisted in app state/config) for reuse later.
+- Users can add their own SVG icons to a custom library (persisted server-side) for reuse later.
 - Users can delete custom icons, but not built-in ones.
 - Built-in icons (v1): `phone`, `email`, `linkedin`, `whatsapp`, `telegram` (from the current template) plus `website` (globe icon).
 - Export always inlines the selected SVG into the generated HTML, same as the current template.
 - Icon picker should highlight the currently selected icon.
 
-## Batch Import Rules (Planned)
-- Batch import accepts `.xlsx` (day 1) and optionally CSV, with columns mapped by header name.
+## Batch Import Rules (Implemented)
+- Batch import accepts `.xlsx` with columns mapped by header name.
 - Missing data in a row can be indicated by empty cell, `none`, or `-` (case-insensitive). That row is skipped for that person.
 - If a contact row is skipped, it is omitted from the generated HTML for that person.
 - Profile images are matched by filename from a selected images folder; if missing or not found, a default placeholder (`pic/profile.png`) is used and a warning is shown.
 - Workbook handling: read the first sheet by default and map columns by header name (not position).
 
 ### CSV/Excel Template (Dynamic)
-The app generates an example CSV/Excel file based on which rows are selected in the Design tab. The "Download CSV template" button appears only in Batch mode (Data tab).
+The app generates an example Excel file based on which rows are selected in the Design tab. The "Download sample" button appears only in Batch mode (Data tab).
 
 Always included columns:
 - `name`, `subtitle1`, `subtitle2`, `profileImageFile`
 
 Generated per row (using the row's slugified label):
-- For `phone`: `<slug>Label`, `<slug>Enabled`
-- For `email`: `<slug>Label`, `<slug>Enabled`
-- For `link`: `<slug>Href` and optionally `<slug>Label` (if omitted, exporter can use the row label as default).
+- For `phone`: `<slug>Label`
+- For `email`: `<slug>Label`
+- For `link`: `<slug>Href` (button label always comes from the Design tab row label)
 
 ## Phone/Email Handling
 - Phone label is user-facing (e.g., `09123456789`).
@@ -156,7 +161,7 @@ Generated per row (using the row's slugified label):
 - If the filename is blank or not found, use the default placeholder image (`pic/profile.png`).
 - When any images are missing, warn in the UI before export; on proceed, write a single `missing.txt` at the batch root listing `personFolderName -> expectedFilename` for each missing image.
 
-## Export Output (Planned)
+## Export Output (Implemented)
 - Single: one folder with `index.html` and `style.css`.
 - Batch: one folder per person, same file structure.
 - Each output folder includes a `pic/` subfolder for profile images.
@@ -166,6 +171,12 @@ Generated per row (using the row's slugified label):
 - Write a single `missing.txt` at batch root listing `personFolderName -> expectedFilename` for missing images.
 - Bundle custom font file if provided; inject @font-face.
 - Exporter injects inline SVG icons and text content into the fixed template.
+
+## Backend Services (Flask)
+- `/api/icons` GET/POST/DELETE: list built-in + custom icons, add custom SVG, delete custom icon; custom icons persisted in `app/data/custom_icons.json`.
+- `/api/template` POST: generate dynamic `.xlsx` sample based on current rows.
+- `/api/import` POST: parse uploaded `.xlsx` using provided rows; returns people + warnings.
+- `/api/export` POST: build export ZIP (single or batch) with `index.html`, `style.css`, `pic/`, optional fonts, and `missing.txt` when images are absent.
 
 ## Constraints
 - Layout and visual style must remain consistent with the current template.
