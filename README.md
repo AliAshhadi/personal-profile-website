@@ -18,21 +18,23 @@
    - macOS/Linux: `git clone https://github.com/AliAshhadi/personal-profile-website.git`
    - Windows (PowerShell): `git clone https://github.com/AliAshhadi/personal-profile-website.git`
 3) Change into the project folder (use the full path on your machine):
-- macOS/Linux: `cd /path/to/personal-profile-website`
-- Windows (PowerShell): `cd C:\path\to\personal-profile-website`
+   - macOS/Linux: `cd /path/to/personal-profile-website`
+   - Windows (PowerShell): `cd C:\path\to\personal-profile-website`
 4) First time setup:
-```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python -m app.app
-```
+    ```bash
+    python -m venv venv
+    source venv/bin/activate   # On Windows: venv\Scripts\activate
+    pip install -r requirements.txt
+    python -m app.app
+    ```
 5) Next time:
-```bash
-source venv/bin/activate   # On Windows: venv\Scripts\activate
-python -m app.app
-```
+    ```bash
+    source venv/bin/activate   # On Windows: venv\Scripts\activate
+    python -m app.app
+    ```
 Open http://127.0.0.1:5000 and use the 3 tabs (Design, Data, Export). The icon library (built-in + your custom SVGs) is stored on disk for reuse.
+
+This program was written with GitHub Copilot and ChatGPT Codex.
 
 ### Credits
 - Template: aliashhadi/personal-profile-website
@@ -58,22 +60,24 @@ Open http://127.0.0.1:5000 and use the 3 tabs (Design, Data, Export). The icon l
 2) در ترمینال سیستم خود دستور کلون را اجرا کنید:
    - macOS/Linux: `git clone https://github.com/AliAshhadi/personal-profile-website.git`
    - ویندوز (PowerShell): `git clone https://github.com/AliAshhadi/personal-profile-website.git`
-3) وارد پوشه پروژه شوید:
-- macOS/Linux: `cd personal-profile-website`
-- ویندوز (PowerShell): `cd personal-profile-website`
+3) وارد پوشه پروژه شوید (مسیر کامل روی سیستم خود را بنویسید):
+   - macOS/Linux: `cd /path/to/personal-profile-website`
+   - ویندوز (PowerShell): `cd C:\path\to\personal-profile-website`
 4) بار اول:
-```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python -m app.app
-```
+    ```bash
+    python -m venv venv
+    source venv/bin/activate   # ویندوز: venv\Scripts\activate
+    pip install -r requirements.txt
+    python -m app.app
+    ```
 5) دفعات بعد:
-```bash
-source venv/bin/activate   # ویندوز: venv\Scripts\activate
-python -m app.app
-```
+    ```bash
+    source venv/bin/activate   # ویندوز: venv\Scripts\activate
+    python -m app.app
+    ```
 آدرس http://127.0.0.1:5000 را باز کنید. آیکن‌های پیش‌فرض و آیکن‌های سفارشی شما روی دیسک ذخیره می‌شوند تا بعداً هم در دسترس باشند.
+
+این برنامه با GitHub Copilot و ChatGPT Codex نوشته شده است.
 
 ### اعتبارها
 - قالب: aliashhadi/personal-profile-website
