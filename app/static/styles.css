@@ -66,6 +66,26 @@ body {
     font-size: 14px;
 }
 
+.status {
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+}
+.status.error {
+    border-color: #fca5a5;
+    background: #fef2f2;
+    color: #b91c1c;
+}
+.status.success {
+    border-color: #34d399;
+    background: #ecfdf3;
+    color: #065f46;
+}
+
 .tabs {
     display: flex;
     gap: 12px;

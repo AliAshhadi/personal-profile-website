@@ -190,7 +190,7 @@
                         <p class="eyebrow">گروهی</p>
                         <h3>ورود فایل .xlsx و پوشه تصاویر</h3>
                     </div>
-                    <button class="secondary">دانلود نمونه اکسل</button>
+                    <button id="download-template" class="secondary" type="button">دانلود نمونه اکسل</button>
                 </div>
                 <div class="field-row">
                     <label for="xlsx">فایل اکسل</label>
@@ -200,6 +200,8 @@
                     <label for="images-folder">پوشه تصاویر</label>
                     <input id="images-folder" type="file" webkitdirectory>
                 </div>
+                <div id="batch-summary" class="status hidden"></div>
+                <div id="batch-warnings" class="status error hidden"></div>
                 <p class="muted">نمونه فایل بر اساس ردیف‌های انتخاب‌شده در تب طراحی ساخته می‌شود.</p>
             </div>
 
@@ -245,9 +247,10 @@
                 <h2>آماده‌سازی فایل‌ها</h2>
                 <p class="muted">هشدارها و خلاصه تنظیمات اینجا نمایش داده می‌شود.</p>
                 <div class="actions">
-                    <button class="primary">ساخت خروجی</button>
-                    <button class="secondary">دانلود ZIP</button>
+                    <button id="export-btn" class="primary" type="button">ساخت خروجی</button>
+                    <button id="zip-btn" class="secondary" type="button">دانلود ZIP</button>
                 </div>
+                <div id="export-warnings" class="status hidden"></div>
             </div>
         </section>
     </div>

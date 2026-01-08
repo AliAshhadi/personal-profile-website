@@ -99,8 +99,14 @@ const state = {
             subtitle2: "",
             profileFile: null,
             rowValues: {}
+        },
+        batch: {
+            people: [],
+            warnings: [],
+            images: []
         }
-    }
+    },
+    exportWarnings: []
 };
 
 window.appState = state;
@@ -132,6 +138,14 @@ const nameEl = document.getElementById("name");
 const subtitle1El = document.getElementById("subtitle1");
 const subtitle2El = document.getElementById("subtitle2");
 const profileEl = document.getElementById("profile");
+const templateBtn = document.getElementById("download-template");
+const xlsxInput = document.getElementById("xlsx");
+const imagesFolderInput = document.getElementById("images-folder");
+const batchSummaryEl = document.getElementById("batch-summary");
+const batchWarningsEl = document.getElementById("batch-warnings");
+const exportBtn = document.getElementById("export-btn");
+const zipBtn = document.getElementById("zip-btn");
+const exportWarningsEl = document.getElementById("export-warnings");
 
 function slugify(text, fallback) {
     const slug = text
@@ -141,6 +155,30 @@ function slugify(text, fallback) {
         .replace(/[^\w\-\u0600-\u06FF_]+/g, "")
         .toLowerCase();
     return slug || fallback;
+}
+
+function setStatus(element, message = "", type = "") {
+    if (!element) return;
+    element.classList.remove("error", "success");
+    if (!message) {
+        element.classList.add("hidden");
+        element.textContent = "";
+        return;
+    }
+    if (type) {
+        element.classList.add(type);
+    }
+    element.classList.remove("hidden");
+    element.textContent = message;
+}
+
+function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
 }
 
 function renderIconGrid(filter = "") {
@@ -538,6 +576,160 @@ resetColorsBtn.addEventListener("click", () => {
     state.theme.defaultMode = defaultColors.defaultMode;
 });
 
+function updateBatchSummary() {
+    const peopleCount = state.data.batch.people.length;
+    const imagesCount = state.data.batch.images.length;
+    const parts = [];
+    if (peopleCount) parts.push(`تعداد رکوردهای بارگذاری شده: ${peopleCount}`);
+    if (imagesCount) parts.push(`تعداد تصاویر انتخاب‌شده: ${imagesCount}`);
+    const message = parts.join(" | ");
+    setStatus(batchSummaryEl, message, peopleCount ? "success" : "");
+    if (state.data.batch.warnings.length) {
+        setStatus(batchWarningsEl, state.data.batch.warnings.join(" | "), "error");
+    } else {
+        setStatus(batchWarningsEl, "");
+    }
+}
+
+async function downloadTemplate() {
+    if (!templateBtn) return;
+    templateBtn.disabled = true;
+    setStatus(batchWarningsEl, "");
+    try {
+        const res = await fetch("/api/template", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ rows: state.rows }),
+        });
+        if (!res.ok) {
+            setStatus(batchWarningsEl, "خطا در ساخت فایل نمونه.", "error");
+            return;
+        }
+        const blob = await res.blob();
+        downloadBlob(blob, "sample.xlsx");
+    } catch (err) {
+        setStatus(batchWarningsEl, "اتصال به سرور برقرار نشد.", "error");
+    } finally {
+        templateBtn.disabled = false;
+    }
+}
+
+async function importXlsxFile(file) {
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("rows", JSON.stringify(state.rows));
+    setStatus(batchWarningsEl, "");
+    setStatus(batchSummaryEl, "در حال پردازش فایل...", "");
+    try {
+        const res = await fetch("/api/import", {
+            method: "POST",
+            body: formData,
+        });
+        if (!res.ok) {
+            setStatus(batchWarningsEl, "خطا در خواندن فایل اکسل.", "error");
+            return;
+        }
+        const payload = await res.json();
+        state.data.batch.people = payload.people || [];
+        state.data.batch.warnings = payload.warnings || [];
+        updateBatchSummary();
+    } catch (err) {
+        setStatus(batchWarningsEl, "خطا در پردازش فایل اکسل.", "error");
+    }
+}
+
+function handleImagesSelection(files) {
+    state.data.batch.images = Array.from(files || []);
+    updateBatchSummary();
+}
+
+function buildPayload() {
+    const theme = {
+        ...state.theme,
+        fontFile: state.theme.font === "Custom" && state.theme.fontFile ? state.theme.fontFile.name : null,
+    };
+    const singleData = {
+        name: state.data.single.name,
+        subtitle1: state.data.single.subtitle1,
+        subtitle2: state.data.single.subtitle2,
+        rowValues: state.data.single.rowValues,
+        profileImageFile: state.data.single.profileFile ? state.data.single.profileFile.name : null,
+    };
+    return {
+        mode: state.mode,
+        rows: state.rows,
+        icons: state.icons,
+        theme,
+        data: {
+            single: singleData,
+            batch: state.data.batch.people,
+        },
+    };
+}
+
+async function runExport() {
+    setStatus(exportWarningsEl, "");
+    const payload = buildPayload();
+    if (payload.mode === "batch" && (!payload.data.batch || payload.data.batch.length === 0)) {
+        setStatus(exportWarningsEl, "ابتدا فایل اکسل را بارگذاری کنید.", "error");
+        return;
+    }
+    if (state.theme.font === "Custom" && !state.theme.fontFile) {
+        setStatus(exportWarningsEl, "برای فونت سفارشی، فایل فونت را انتخاب کنید.", "error");
+        return;
+    }
+    if (exportBtn) exportBtn.disabled = true;
+    if (zipBtn) zipBtn.disabled = true;
+    try {
+        const formData = new FormData();
+        formData.append("payload", JSON.stringify(payload));
+        if (payload.mode === "single" && state.data.single.profileFile) {
+            formData.append("profile", state.data.single.profileFile, state.data.single.profileFile.name);
+        }
+        if (payload.mode === "batch" && state.data.batch.images.length) {
+            state.data.batch.images.forEach((file) => {
+                const name = file.webkitRelativePath ? file.webkitRelativePath.split("/").pop() : file.name;
+                formData.append("images", file, name);
+            });
+        }
+        if (state.theme.font === "Custom" && state.theme.fontFile) {
+            formData.append("font", state.theme.fontFile, state.theme.fontFile.name);
+        }
+        const res = await fetch("/api/export", {
+            method: "POST",
+            body: formData,
+        });
+        if (!res.ok) {
+            setStatus(exportWarningsEl, "خطا در ساخت خروجی.", "error");
+            return;
+        }
+        const warningsHeader = res.headers.get("X-Export-Warnings");
+        const blob = await res.blob();
+        downloadBlob(blob, "export.zip");
+
+        if (warningsHeader) {
+            try {
+                const warnings = JSON.parse(warningsHeader);
+                if (warnings.length) {
+                    setStatus(exportWarningsEl, `تصاویر یافت نشد: ${warnings.join(" | ")}`, "error");
+                } else {
+                    setStatus(exportWarningsEl, "خروجی با موفقیت ساخته شد.", "success");
+                }
+            } catch {
+                setStatus(exportWarningsEl, "خروجی ساخته شد.", "success");
+            }
+        } else {
+            setStatus(exportWarningsEl, "خروجی با موفقیت ساخته شد.", "success");
+        }
+    } catch (err) {
+        setStatus(exportWarningsEl, "خطای ارتباط با سرور.", "error");
+    } finally {
+        if (exportBtn) exportBtn.disabled = false;
+        if (zipBtn) zipBtn.disabled = false;
+    }
+}
+
 function initUI() {
     state.rows = rows;
     state.icons = iconLibrary;
@@ -568,9 +760,31 @@ function initUI() {
         state.data.single.profileFile = file || null;
     });
 
+    if (templateBtn) {
+        templateBtn.addEventListener("click", downloadTemplate);
+    }
+    if (xlsxInput) {
+        xlsxInput.addEventListener("change", (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (file) importXlsxFile(file);
+        });
+    }
+    if (imagesFolderInput) {
+        imagesFolderInput.addEventListener("change", (e) => {
+            handleImagesSelection(e.target.files);
+        });
+    }
+    if (exportBtn) {
+        exportBtn.addEventListener("click", runExport);
+    }
+    if (zipBtn) {
+        zipBtn.addEventListener("click", runExport);
+    }
+
     renderIconGrid();
     renderRowList();
     renderRowValues();
+    updateBatchSummary();
 }
 
 window.addEventListener("DOMContentLoaded", initUI);
