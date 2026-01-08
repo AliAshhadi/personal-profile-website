@@ -54,7 +54,7 @@
 تصویر پروفایل در حال حاضر روی مسیر زیر تنظیم شده است:
 
 ```html
-<img src="pic/account-circle-line(1).png" />
+<img src="pic/profile.png" />
 ```
 
 برای تغییر تصویر:
@@ -107,4 +107,3 @@
 ## اعتبارها
 
 - آیکون‌ها: [RemixIcon](https://remixicon.com/)
-

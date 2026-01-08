@@ -1,110 +1,181 @@
-# This document is designed for AI chatbots or agents to understand the project structure, design decisions, and implementation details of this personal profile website template.
+# Architecture Document - Personal Profile Link Page Generator
 
-# Architecture Document — Personal Profile Website Template
+## Purpose
+A Persian-first web app that generates a single-page, RTL personal/business link page with the same look as the current template. It supports single-person generation and batch production from CSV/Excel, while keeping the layout consistent and only allowing controlled customization (colors, font, rows, icons).
 
-**Overview:**  
-A reusable single-file, mobile-first personal business profile website template in Persian (Farsi). Plain HTML5 + CSS3 + minimal JS only, RTL layout, accessible, minimal-professional aesthetic, centered card-based design with dark mode default and toggle. Designed for easy customization by replacing placeholders with individual data.
+## Goals
+- Preserve the current visual design and layout; customization must not break the overall look.
+- Provide an easy UI for non-technical users to configure theme, icons, and rows.
+- Support single-person output and batch generation via a mode toggle.
+- Export per-person folders containing `index.html` and `style.css`.
+- Provide a built-in icon library (SVG-only) with search and the ability to add custom icons.
 
-**File Structure:**  
-- `index.html` : Main HTML file (UTF-8, `dir="rtl"`, embeds the exact inline SVGs, includes minimal JS for theme toggle).  
-- `style.css` : Main stylesheet (organized, commented, mobile-first, with CSS variables for theming).  
-- `README.md` : Brief documentation and customization notes.
+## Non-goals (v1)
+- No redesign of the UI template.
+- No multi-page output or server-side hosting.
+- No multi-language UI (Persian-first only).
 
-**Component Breakdown:**  
-- Theme Toggle Button:
-  - Fixed position top-left, circular button with sun/moon icons.
-  - Toggles between light and dark modes using minimal JS.
-  - Default: dark mode.
-- Header:
-  - Purpose: optional small top area (kept light/minimal or omitted to emphasize card). Could contain small logo or invisible skip link for accessibility.
-- Main Card (centered):
-  - Profile Section:
-    - Circular profile image (pic/account-circle-line(1).png) with `alt="عکس پروفایل"`.
-    - Full name: `نام و نام خانوادگی` — large, bold.
-    - Two-line subtitle/description:
-      - Line 1: `خط اول توضیح`
-      - Line 2: `خط دوم توضیح`
-  - Contact Buttons Section:
-    - A horizontal (wraps on small screens) group of five accessible anchor-buttons:
-      1. Phone (tel:+989123456789) — shows `09123456789`
-      2. Email (mailto:email@example.com) — shows `email@example.com`
-      3. LinkedIn (https://www.linkedin.com/) — opens new tab
-      4. WhatsApp (https://whatsapp.com) — opens new tab
-      5. Telegram (https://t.me/) — opens new tab
-    - Each button contains the exact inline SVG provided, an accessible label (`aria-label`) and a small display text.
-  - Footer inside card:
-    - "Made by aliahhadi/Copilot" as a clickable link to the project repository.
-- Footer (page-level):
-  - Minimal, center-aligned small text (repeat or keep only card footer).
+## Core UX (Current)
+The app has 3 tabs in a single interface (UI skeleton complete, no export yet):
 
-**Accessibility & Semantic Notes:**  
-- Use semantic elements: `<main>`, `<header>`, `<footer>`, `<figure>` for profile image, `<nav>` or `<section>` for contact group if desired.  
-- Use anchors `<a>` for actionable items (tel/mailto/external links). Style anchors as buttons.  
-- `aria-label` on links for screen readers (explicit Persian labels).  
-- `alt` text for image.  
-- Ensure >= WCAG contrast for text & buttons.  
-- Minimum touch target: 44x44px; use padding to achieve it.  
-- Keyboard focus styles (visible outline).  
-- Use `rel="noopener noreferrer"` on external `target="_blank"` links.
+1) Design Tab
+- Row builder first: add/remove/reorder rows, choose row type (`phone`/`email`/`link`), set button label, pick icon via a visual icon picker (searchable), and see the slug that will be used in data imports.
+- Icons are SVG code only (inline SVG), no PNG uploads.
+- Built-in icon library with search and preview; users can paste custom SVG and add it to the library (can delete custom icons, not built-in ones).
+- Advanced section at the end for theme/colors/font and default mode. If `Custom` font is selected, user can upload a font file to bundle with export.
 
-**Color Scheme & Typography:**  
-- Font:
-  - Use Vazir CDN: `<link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">`.
-  - CSS: `font-family: 'Vazir', sans-serif;` (fallback: system sans).
-- Palette (suggested; used in CSS with CSS variables for theming):
-  - Light Mode:
-    - Neutral background: very-light warm gray — `#f6f6f7` or `#fbfbfb`.
-    - Card background: white `#ffffff`.
-    - Accent 1 (primary): Light blue gradient start — `#4db8e6`.
-    - Accent 2: Deep blue accent end — `#0095da`.
-    - Muted text: `#444` for body; secondary text `#666`.
-    - Subtle shadow: `rgba(16, 24, 40, 0.06)` for depth.
-  - Dark Mode (default):
-    - Neutral background: dark gray — `#1a1a1a` to `#2d2d2d`.
-    - Card background: darker gray `#333333`.
-    - Accent 1: Adjusted blue `#5a9bd4`.
-    - Accent 2: `#2e7bc8`.
-    - Muted text: `#ffffff`; secondary `#cccccc`.
-    - Subtle shadow: `rgba(0, 0, 0, 0.2)` for depth.
-  - Buttons: use accent gradient with hover to darker shades in both modes.
-- Effects:
-  - Subtle glassy gradient on header or page background: diagonal soft gradient using Accent 1->Accent 2 with low opacity.
-  - Smooth transitions: `transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;`
-- Spacing:
-  - Use a small scale based on 8px rhythm: padding/margins 8/12/16/24/32.
+2) Data Tab
+- Mode toggle: Single vs Batch.
+- Batch mode: `.xlsx` upload, images folder picker, “Download sample” button at top (generated from current row selection).
+- Single mode: base info (name, subtitles, profile image) + per-row value inputs derived from row builder (bound to state, no export yet).
 
-**Responsive Breakpoints Strategy (Mobile-first):**  
-- Base (mobile): default styles assume single-column, stacked layout with contact buttons in a vertical column, text centered relative to icon position, icons on the right with margin.  
-- Breakpoint 1 — `@media (min-width: 600px)` (sm / tablet):
-  - Increase paddings, horizontally center card with more margin, arrange contact buttons in a centered row with wrapping.
-- Breakpoint 2 — `@media (min-width: 900px)` (md / small desktop):
-  - Card width constrained (max-width ~720–900px), larger avatar, increase typography scale.
-- Breakpoint 3 — `@media (min-width: 1200px)` (lg / large desktop):
-  - Optional minor layout tweaks (more whitespace, subtle two-column possibilities if content grows).
-- Mobile-first notes:
-  - Start with stacked vertical flow; progressively adjust to horizontal button row and larger typography at breakpoints.
+3) Export Tab
+- Validate inputs and generate output folders.
+- Batch export creates a folder per person with `index.html` and `style.css`.
 
-**RTL Considerations (Persian):**  
-- Mark document: `<html lang="fa" dir="rtl">` and set `body { direction: rtl; }` to ensure correct cursor and punctuation flow.  
-- Use logical CSS properties (margin-inline-start/end, padding-inline) when appropriate, or rely on symmetric center alignment to avoid horizontal flips.  
-- Icons: keep icon preceding text visually — in RTL the icon should appear to the right of the label if following natural flow; but for centered button layout with icon above/beside label, ensure visual alignment is consistent. We'll place icon above or to the side but centered to avoid mirrored confusion.  
-- Use `text-align: center` for most card content to avoid mirrored layouts; for left-to-right elements such as phone numbers, preserve LTR numerals by wrapping them in `<span dir="ltr">09123456789</span>` so the number reads correctly.  
-- Input or copyable LTR text (like emails and URLs) should be inside `dir="ltr"` or `unicode-bidi: embed` to preserve correct ordering and avoid punctuation issues.
+## Data Model (Minimal Schema)
+The UI edits a single configuration object used for both single and batch generation.
 
-**Performance & Optimizations:**  
-- Keep CSS scoped and minimal — only the classes used, with CSS variables for efficient theming.  
-- Inline SVGs avoid extra HTTP requests for small icons. Since we embed provided SVGs, they render fast and inherit `currentColor`.  
-- Minimal JS for theme toggle (no frameworks).  
-- Use a single small CSS file; avoid heavy gradients or images. Profile image uses `object-fit: cover` for efficient circular display.  
-- Defer any heavy images; compress profile photo if added later.
+```
+{
+  "meta": { "language": "fa", "dir": "rtl", "template": "personal-profile-v1" },
+  "theme": {
+    "mode": "dark",
+    "defaultMode": "dark",
+    "font": "Vazir" | "Custom",
+    "fontFile": null, // if Custom, bundle the uploaded font
+    "accent": {
+      "style": "gradient",   // gradient or solid
+      "color": "#2e7bc8",    // used to derive gradient
+      "solidColor": "#2e7bc8"// used when style = solid
+    },
+    "text": {
+      "light": { "title": "#444444", "subtitle": "#666666" },
+      "dark": { "title": "#ffffff", "subtitle": "#cccccc" }
+    },
+    "background": {
+      "light": { "page": "#f6f6f7", "card": "#ffffff" },
+      "dark": { "page": "#1a1a1a", "card": "#333333" }
+    }
+  },
+  "rows": [
+    { "id": "r1", "label": "تلفن", "type": "phone", "icon": "phone" },
+    { "id": "r2", "label": "ایمیل", "type": "email", "icon": "email" },
+    { "id": "r3", "label": "لینکدین", "type": "link", "icon": "linkedin" }
+  ],
+  "icons": { "phone": "<svg...>", "email": "<svg...>", "website": "<svg...>", ... },
+  "person": { "name": "...", "subtitle1": "...", "subtitle2": "...", "profileImageFile": "profile.png" },
+  "contacts": {
+    "phone": { "enabled": true, "label": "09123456789", "href": "tel:09123456789" },
+    "email": { "enabled": true, "label": "email@example.com", "href": "mailto:email@example.com" },
+    "linkedin": { "label": "لینکدین", "href": "https://www.linkedin.com/" },
+    "whatsapp": { "label": "واتساپ", "href": "https://whatsapp.com" },
+    "telegram": { "label": "تلگرام", "href": "https://t.me/" },
+    "website": { "label": "وب‌سایت", "href": "https://example.com" }
+  },
+  "footer": { "text": "Made by", "linkText": "...", "linkHref": "..." }
+}
+```
 
-**ARIA & Semantic Markup (examples):**  
-- `<figure><img alt="عکس پروفایل"></figure>`  
-- Contact links: `<a href="tel:..." class="contact-btn" aria-label="تماس">...</a>`  
-- Footer link: `<a href="https://github.com" target="_blank" rel="noopener noreferrer">aliahhadi/Copilot</a>`
+Notes:
+- Rows are dynamic; each row has `label` (button text), `type` (phone/email/link), and `icon` (key into icon library). Duplicates are allowed (e.g., multiple phones).
+- Phone/email rows can be toggled off in UI; other rows are controlled by row list.
+- Inline SVG is stored per contact type and injected into the output HTML.
+- Profile images are exported into a `pic/` folder and referenced in HTML as `pic/<profileImageFile>`.
+- Theme fields above are high-level controls; exporter derives the final CSS variables used by the template.
+- If a custom font is provided, bundle the font file with export and inject the @font-face into CSS.
 
-**Polish & Microinteractions:**  
-- Hover and active states: subtle `transform: translateY(-4px)` and shadow increase on hover; `:active` compress slightly.  
-- Focus state: 3px outline in accent color for keyboard users.  
-- Button icon uses `currentColor` so color changes propagate naturally.  
-- Small subtle background pattern (CSS radial-gradient or SVG pattern with low opacity) to add depth without affecting performance.
+## Theme & Color Controls (UI -> CSS Variables)
+The generator should keep the current look by using the same CSS variable approach as the template, but expose safe, high-level controls in the UI.
+
+### Accent (Buttons/Links/Focus)
+Controls:
+- Accent style: `gradient` or `solid`.
+- When `gradient`: single color input (`accent.color`) used to derive start/end/hover/link tokens.
+- When `solid`: single color input (`accent.solidColor`) used for buttons/links.
+- A reset button restores the default color set from the base template.
+
+Derived CSS variables (examples; naming matches the current template):
+- `--accent-start`, `--accent-end`
+- `--accent-hover-start`, `--accent-hover-end`
+- `--link-color`
+- Focus outline color
+
+### Text Colors (Per Mode)
+Controls:
+- Light mode: `theme.text.light.title` and `theme.text.light.subtitle`
+- Dark mode: `theme.text.dark.title` and `theme.text.dark.subtitle`
+
+Derived CSS variables:
+- `--title-color` and `--subtitle-color` per mode (or reuse `--text-color`/`--subtitle-color` but treat them as title/subtitle tokens in generation).
+
+### Background
+Controls:
+- Light mode: `theme.background.light.page` (page background) and `theme.background.light.card` (card color).
+- Dark mode: fixed defaults (`page`/`card`) with no brightness slider (keep base template look).
+
+Notes:
+- Keep card contrast stable; warn on low-contrast combinations (especially button foreground and title/subtitle).
+
+## Icon Library
+- The program ships with a built-in icon library file (SVG-only) that the UI can search and insert from.
+- Row selection must not delete icons; it only changes which rows are rendered.
+- Users can add their own SVG icons to a custom library (persisted in app state/config) for reuse later.
+- Users can delete custom icons, but not built-in ones.
+- Built-in icons (v1): `phone`, `email`, `linkedin`, `whatsapp`, `telegram` (from the current template) plus `website` (globe icon).
+- Export always inlines the selected SVG into the generated HTML, same as the current template.
+- Icon picker should highlight the currently selected icon.
+
+## Batch Import Rules (Planned)
+- Batch import accepts `.xlsx` (day 1) and optionally CSV, with columns mapped by header name.
+- Missing data in a row can be indicated by empty cell, `none`, or `-` (case-insensitive). That row is skipped for that person.
+- If a contact row is skipped, it is omitted from the generated HTML for that person.
+- Profile images are matched by filename from a selected images folder; if missing or not found, a default placeholder (`pic/profile.png`) is used and a warning is shown.
+- Workbook handling: read the first sheet by default and map columns by header name (not position).
+
+### CSV/Excel Template (Dynamic)
+The app generates an example CSV/Excel file based on which rows are selected in the Design tab. The "Download CSV template" button appears only in Batch mode (Data tab).
+
+Always included columns:
+- `name`, `subtitle1`, `subtitle2`, `profileImageFile`
+
+Generated per row (using the row's slugified label):
+- For `phone`: `<slug>Label`, `<slug>Enabled`
+- For `email`: `<slug>Label`, `<slug>Enabled`
+- For `link`: `<slug>Href` and optionally `<slug>Label` (if omitted, exporter can use the row label as default).
+
+## Phone/Email Handling
+- Phone label is user-facing (e.g., `09123456789`).
+- Phone href is auto-generated as `tel:<normalized>`.
+- Normalization rule: if the number starts with `+`, keep it; if it starts with `0`, keep it; otherwise prefix a `0`.
+- Email href is auto-generated as `mailto:<email>`.
+
+## Profile Image Handling
+- Single mode: upload an image; exporter copies it into `pic/` in the output folder.
+- Batch mode: CSV provides `profileImageFile`; user selects an images folder for matching.
+- If the filename is blank or not found, use the default placeholder image (`pic/profile.png`).
+- When any images are missing, warn in the UI before export; on proceed, write a single `missing.txt` at the batch root listing `personFolderName -> expectedFilename` for each missing image.
+
+## Export Output (Planned)
+- Single: one folder with `index.html` and `style.css`.
+- Batch: one folder per person, same file structure.
+- Each output folder includes a `pic/` subfolder for profile images.
+- Folder naming: full name with spaces replaced by underscores (e.g., `علی_اشهدی`).
+- If a folder name collides, append `_2`, `_3`, ... to make it unique.
+- Optional ZIP download of batch output.
+- Write a single `missing.txt` at batch root listing `personFolderName -> expectedFilename` for missing images.
+- Bundle custom font file if provided; inject @font-face.
+- Exporter injects inline SVG icons and text content into the fixed template.
+
+## Constraints
+- Layout and visual style must remain consistent with the current template.
+- Only allow controlled changes: colors, fonts, row selection, icon SVGs.
+- Theme colors are global only (no per-person overrides).
+
+## Template Fidelity Requirements
+- Preserve `lang="fa"` and `dir="rtl"` on the root HTML element.
+- Keep `body` default class set by the chosen default mode (dark or light) and the theme toggle behavior.
+- Phone and email labels should be wrapped with `dir="ltr"` for correct number/email ordering.
+- External links open in a new tab with `rel="noopener noreferrer"`.
+- Icons remain inline SVG with `currentColor` for color inheritance.
+- Keep the profile image `alt` text and the `pic/` image path convention.

@@ -71,3 +71,8 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
+
+# Local planning docs
+planning.md
+roadmap.md
+corepromt.txt

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سازنده لینک‌پیج</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <header class="app-header">
+            <div>
+                <p class="eyebrow">اسکلت اولیه</p>
+                <h1>سازنده لینک‌پیج</h1>
+                <p class="muted">طراحی ردیف‌ها، داده‌گذاری و آماده‌سازی خروجی استاتیک</p>
+            </div>
+        </header>
+
+        <nav class="tabs" aria-label="Tabs">
+            <button class="tab-button active" data-tab="design">طراحی</button>
+            <button class="tab-button" data-tab="data">داده</button>
+            <button class="tab-button" data-tab="export">خروجی</button>
+        </nav>
+
+        <!-- طراحی -->
+        <section id="design" class="tab-panel active">
+            <div class="panel">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">ردیف‌ها</p>
+                        <h2>چیدمان و آیکن ردیف‌ها</h2>
+                        <p class="muted">ترتیب، نوع (تلفن/ایمیل/لینک)، برچسب روی دکمه و آیکن هر ردیف را مشخص کنید.</p>
+                    </div>
+                    <button id="add-row" class="ghost">+ افزودن ردیف</button>
+                </div>
+                <div class="row-headers">
+                    <span>متن دکمه</span>
+                    <span>نوع</span>
+                    <span>آیکن</span>
+                    <span>عملیات</span>
+                </div>
+                <div id="row-list" class="row-list"></div>
+            </div>
+
+            <div class="grid-2">
+                <div class="panel">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">کتابخانه آیکن</p>
+                            <h2>آیکن‌های پیش‌فرض و جستجو</h2>
+                        </div>
+                        <input id="icon-search" class="search" type="search" placeholder="جستجوی نام آیکن">
+                    </div>
+                    <div id="icon-grid" class="icon-grid"></div>
+                    <div class="field-row">
+                        <label for="icon-name">نام آیکن سفارشی</label>
+                        <input id="icon-name" type="text" placeholder="مثلاً bank یا github">
+                    </div>
+                    <div class="field-row">
+                        <label for="custom-svg">کد SVG</label>
+                        <textarea id="custom-svg" rows="4" placeholder="کد SVG را اینجا بچسبانید"></textarea>
+                    </div>
+                    <button id="add-icon" class="secondary">افزودن به کتابخانه</button>
+                </div>
+
+                <div class="panel">
+                    <p class="eyebrow">تنظیمات پیشرفته</p>
+                    <h2>رنگ، گرادینت و تایپوگرافی</h2>
+                    <p class="muted">برای حفظ ظاهر فعلی، تنظیمات پیشرفته را در صورت نیاز تغییر دهید.</p>
+
+                    <div class="field-row">
+                        <label>حالت پیش‌فرض صفحه</label>
+                        <div class="toggle-row">
+                            <label><input type="radio" name="default-mode" value="dark" checked> تاریک</label>
+                            <label><input type="radio" name="default-mode" value="light"> روشن</label>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <label for="font">فونت</label>
+                        <select id="font">
+                            <option>Vazir</option>
+                            <option>Custom</option>
+                        </select>
+                    </div>
+                    <div id="custom-font-field" class="field-row hidden">
+                        <label for="custom-font">آپلود فونت (ttf/otf/woff)</label>
+                        <input id="custom-font" type="file" accept=".ttf,.otf,.woff,.woff2">
+                    </div>
+
+                    <div class="stack">
+                        <button id="reset-colors" class="secondary" type="button">بازنشانی رنگ به حالت پیش‌فرض</button>
+                        <div class="field-row">
+                            <label for="accent-style">استایل تاکید</label>
+                            <select id="accent-style">
+                                <option value="gradient">گرادینت</option>
+                                <option value="solid">تک‌رنگ</option>
+                            </select>
+                        </div>
+                        <div id="accent-gradient-field" class="field-row">
+                            <label for="accent-color">رنگ گرادینت</label>
+                            <div class="color-input">
+                                <input id="accent-color" type="color" value="#2e7bc8">
+                                <span class="color-chip" data-color-display="accent-color">#2e7bc8</span>
+                            </div>
+                        </div>
+                        <div id="accent-solid-field" class="field-row hidden">
+                            <label for="solid-color">رنگ پس‌زمینه</label>
+                            <div class="color-input">
+                                <input id="solid-color" type="color" value="#2e7bc8">
+                                <span class="color-chip" data-color-display="solid-color">#2e7bc8</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stack">
+                        <p class="eyebrow">متن و پس‌زمینه</p>
+                        <div class="dual">
+                            <div class="field-row">
+                                <label for="light-title">عنوان (روشن)</label>
+                                <div class="color-input">
+                                    <input id="light-title" type="color" value="#444444">
+                                    <span class="color-chip" data-color-display="light-title">#444444</span>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <label for="light-sub">توضیح (روشن)</label>
+                                <div class="color-input">
+                                    <input id="light-sub" type="color" value="#666666">
+                                    <span class="color-chip" data-color-display="light-sub">#666666</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dual">
+                            <div class="field-row">
+                                <label for="dark-title">عنوان (تاریک)</label>
+                                <div class="color-input">
+                                    <input id="dark-title" type="color" value="#ffffff">
+                                    <span class="color-chip" data-color-display="dark-title">#ffffff</span>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <label for="dark-sub">توضیح (تاریک)</label>
+                                <div class="color-input">
+                                    <input id="dark-sub" type="color" value="#cccccc">
+                                    <span class="color-chip" data-color-display="dark-sub">#cccccc</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dual">
+                            <div class="field-row">
+                                <label for="page-bg">رنگ پس‌زمینه صفحه</label>
+                                <div class="color-input">
+                                    <input id="page-bg" type="color" value="#f6f6f7">
+                                    <span class="color-chip" data-color-display="page-bg">#f6f6f7</span>
+                                </div>
+                            </div>
+                            <div class="field-row">
+                                <label for="card-bg">رنگ کارت/جعبه</label>
+                                <div class="color-input">
+                                    <input id="card-bg" type="color" value="#ffffff">
+                                    <span class="color-chip" data-color-display="card-bg">#ffffff</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- داده -->
+        <section id="data" class="tab-panel">
+            <div class="panel">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">حالت داده</p>
+                        <h2>تک‌نفره یا گروهی</h2>
+                    </div>
+                </div>
+                <div class="toggle-row">
+                    <label><input type="radio" name="mode" value="single" checked> تک‌نفره</label>
+                    <label><input type="radio" name="mode" value="batch"> گروهی</label>
+                </div>
+            </div>
+
+            <div class="panel mode-panel hidden" data-mode="batch">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">گروهی</p>
+                        <h3>ورود فایل .xlsx و پوشه تصاویر</h3>
+                    </div>
+                    <button class="secondary">دانلود نمونه اکسل</button>
+                </div>
+                <div class="field-row">
+                    <label for="xlsx">فایل اکسل</label>
+                    <input id="xlsx" type="file" accept=".xlsx">
+                </div>
+                <div class="field-row">
+                    <label for="images-folder">پوشه تصاویر</label>
+                    <input id="images-folder" type="file" webkitdirectory>
+                </div>
+                <p class="muted">نمونه فایل بر اساس ردیف‌های انتخاب‌شده در تب طراحی ساخته می‌شود.</p>
+            </div>
+
+            <div class="panel mode-panel" data-mode="single">
+                <p class="eyebrow">تک‌نفره</p>
+                <h3>اطلاعات پایه</h3>
+                <div class="dual">
+                    <div class="field-row">
+                        <label for="name">نام</label>
+                        <input id="name" type="text" placeholder="نام و نام خانوادگی">
+                    </div>
+                    <div class="field-row">
+                        <label for="profile">عکس پروفایل</label>
+                        <input id="profile" type="file" accept="image/*">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <label for="subtitle1">توضیح 1</label>
+                    <input id="subtitle1" type="text" placeholder="خط اول">
+                </div>
+                <div class="field-row">
+                    <label for="subtitle2">توضیح 2</label>
+                    <input id="subtitle2" type="text" placeholder="خط دوم">
+                </div>
+
+                <div class="panel" style="margin-top:16px;">
+                    <div class="panel-head">
+                        <div>
+                            <p class="eyebrow">مقادیر ردیف‌ها</p>
+                            <h3>داده‌های هر ردیف</h3>
+                            <p class="muted">برچسب دکمه از تب طراحی می‌آید؛ اینجا فقط مقدار (شماره/ایمیل/لینک) را وارد کنید.</p>
+                        </div>
+                    </div>
+                    <div id="single-row-values" class="row-values"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- خروجی -->
+        <section id="export" class="tab-panel">
+            <div class="panel">
+                <p class="eyebrow">خروجی</p>
+                <h2>آماده‌سازی فایل‌ها</h2>
+                <p class="muted">هشدارها و خلاصه تنظیمات اینجا نمایش داده می‌شود.</p>
+                <div class="actions">
+                    <button class="primary">ساخت خروجی</button>
+                    <button class="secondary">دانلود ZIP</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
