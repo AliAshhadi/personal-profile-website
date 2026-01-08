@@ -195,11 +195,6 @@ def render_profile_html(person: dict, contacts: List[dict], theme: dict, profile
     name = html.escape(person.get("name", ""))
     subtitle1 = html.escape(person.get("subtitle1", ""))
     subtitle2 = html.escape(person.get("subtitle2", ""))
-    footer_link = person.get("footer", {}).get("linkHref") if isinstance(person.get("footer"), dict) else None
-    footer_text = person.get("footer", {}).get("text") if isinstance(person.get("footer"), dict) else "Made by"
-    footer_link_text = person.get("footer", {}).get("linkText") if isinstance(person.get("footer"), dict) else "aliahhadi/Copilot"
-    footer_link_href = footer_link or "https://github.com/AliAshhadi/personal-profile-website"
-
     contacts_html = ""
     for contact in contacts:
         span_dir = f' dir="{contact["dir"]}"' if contact.get("dir") else ""
@@ -237,9 +232,6 @@ def render_profile_html(person: dict, contacts: List[dict], theme: dict, profile
         <section class="contact-section">
             {contacts_html}
         </section>
-        <footer class="card-footer">
-            <p>{html.escape(footer_text)} <a href="{html.escape(footer_link_href, quote=True)}" target="_blank" rel="noopener noreferrer">{html.escape(footer_link_text)}</a></p>
-        </footer>
     </main>
     <script>
         const themeToggle = document.getElementById('theme-toggle');

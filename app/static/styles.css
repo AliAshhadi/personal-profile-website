@@ -284,10 +284,7 @@ body {
     height: 40px;
 }
 
-.color-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.color-code {
     min-width: 90px;
     padding: 8px 10px;
     border: 1px solid var(--border);

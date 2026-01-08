@@ -3,6 +3,7 @@ from io import BytesIO
 
 from flask import Flask, jsonify, render_template, request, send_file
 
+from app.icon_store import add_icon, delete_icon, get_icons
 from app.export_service import generate_export_archive
 from app.xlsx_utils import build_template_workbook, parse_workbook
 
@@ -12,6 +13,28 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.get("/api/icons")
+def list_icons():
+    return jsonify({"icons": get_icons()})
+
+
+@app.post("/api/icons")
+def create_icon():
+    data = request.get_json(silent=True, force=True) or {}
+    name = (data.get("name") or "").strip()
+    svg = (data.get("svg") or "").strip()
+    if not name or not svg:
+        return jsonify({"error": "نام و SVG الزامی است."}), 400
+    icons, key = add_icon(name, svg)
+    return jsonify({"icons": icons, "key": key})
+
+
+@app.delete("/api/icons/<key>")
+def remove_icon(key):
+    icons = delete_icon(key)
+    return jsonify({"icons": icons})
 
 
 @app.post("/api/template")

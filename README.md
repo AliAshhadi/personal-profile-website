@@ -1,109 +1,81 @@
-# قالب وب‌سایت پروفایل کسب‌وکار شخصی
+[🇬🇧 English](#english) | [🇮🇷 فارسی](#فارسی)
 
-## 🌐 پیش‌نمایش زنده (Live Demo)
+## English
 
-برای مشاهده نمونه اجراشده این قالب، روی لینک زیر کلیک کنید:
+### Live Demo
+- URL: [https://aliashhadi.github.io/personal-profile-website/](https://aliashhadi.github.io/personal-profile-website/)
+- Preview GIF:  
+  [![Site preview](examplegif.gif)](https://aliashhadi.github.io/personal-profile-website/)
 
-🔗 **مشاهده وب‌سایت:** [https://aliashhadi.github.io/personal-profile-website/](https://aliashhadi.github.io/personal-profile-website/)
+### What this app does
+- Build a Persian-first, RTL single-page profile/link site with your rows, icons, colors, and font.
+- Export single or batch outputs as static `index.html` + `style.css` folders; inline SVG icons and optional custom font are bundled.
+- Batch import from `.xlsx` with a matching images folder; missing images are replaced with a placeholder and listed in `missing.txt`.
 
-## 🖼️ پیش‌نمایش ظاهری
+### Run locally
+1) Install Python 3 (latest) for your OS.  
+2) Open your system terminal and clone the repo:
+   - macOS/Linux: `git clone https://github.com/AliAshhadi/personal-profile-website.git`
+   - Windows (PowerShell): `git clone https://github.com/AliAshhadi/personal-profile-website.git`
+3) Change into the project folder (use the full path on your machine):
+- macOS/Linux: `cd /path/to/personal-profile-website`
+- Windows (PowerShell): `cd C:\path\to\personal-profile-website`
+4) First time setup:
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python -m app.app
+```
+5) Next time:
+```bash
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+python -m app.app
+```
+Open http://127.0.0.1:5000 and use the 3 tabs (Design, Data, Export). The icon library (built-in + your custom SVGs) is stored on disk for reuse.
 
-نمای کلی وب‌سایت در تصویر متحرک زیر قابل مشاهده است:
-
-[![نمایش وب‌سایت](examplegif.gif)](https://aliashhadi.github.io/personal-profile-website/)
-
-> این GIF نمایی از طراحی، چیدمان ریسپانسیو و ظاهر کلی قالب را نشان می‌دهد.
+### Credits
+- Template: aliashhadi/personal-profile-website
+- Icons: [RemixIcon](https://remixicon.com/)
+- Persian font: [Vazirmatn](https://rastikerdar.github.io/vazirmatn/)
 
 ---
 
-## 🌙☀️ پشتیبانی از حالت تاریک و روشن (Dark / Light Mode)
+## فارسی
 
-این قالب به‌صورت پیش‌فرض با **حالت تاریک (Dark Mode)** اجرا می‌شود و دارای یک **دکمه سوییچ تغییر تم** در گوشه بالای سمت چپ صفحه است:
+### لینک زنده
+- آدرس: [https://aliashhadi.github.io/personal-profile-website/](https://aliashhadi.github.io/personal-profile-website/)
+- پیش‌نمایش GIF:  
+  [![نمایش وب‌سایت](examplegif.gif)](https://aliashhadi.github.io/personal-profile-website/)
 
-- 🌙 حالت تاریک برای استفاده در محیط‌های کم‌نور
-- ☀️ حالت روشن برای خوانایی بهتر در نور روز
-- تغییر تم به‌صورت آنی و بدون رفرش صفحه انجام می‌شود
+### این اپ چه می‌سازد؟
+- یک صفحه پروفایل/لینک RTL با ردیف‌های دلخواه، آیکن‌های SVG، رنگ‌ها و فونت سفارشی.
+- خروجی تکی یا گروهی به صورت پوشه استاتیک `index.html` و `style.css`؛ آیکن‌ها و فونت سفارشی داخل خروجی قرار می‌گیرند.
+- ورود فایل اکسل (`.xlsx`) در حالت گروهی + پوشه تصاویر؛ تصاویر گمشده با جایگزین پیش‌فرض و فایل `missing.txt` گزارش می‌شوند.
 
----
-
-این یک قالب وب‌سایت پروفایل کسب‌وکار شخصی تک‌صفحه‌ای قابل استفاده مجدد است که تنها با HTML5 و CSS3 ساخته شده. این قالب دارای طراحی مینیمال و مدرن با پشتیبانی RTL برای متن فارسی، چیدمان کاملاً ریسپانسیو و برندینگ یکپارچه است. عالی برای ایجاد چندین وب‌سایت شخصی‌سازی شده با جایگزین کردن داده‌های فردی به جای placeholderها.
-
-## ویژگی‌ها
-
-- **چیدمان RTL**: جهت متن راست به چپ برای محتوای فارسی با کدگذاری UTF-8.
-- **طراحی ریسپانسیو**: رویکرد موبایل-اول با چیدمان‌های بهینه‌سازی شده برای همه اندازه‌های صفحه.
-- **تم تاریک و روشن**: دارای دکمه سوییچ تغییر تم (Dark / Light Mode).
-- **بهینه‌سازی موبایل**: دکمه‌های تماس انباشته شده با متن وسط‌چین و آیکون‌های راست‌چین در صفحه‌های کوچک.
-- **دسترسی‌پذیری**: HTML معنایی، برچسب‌های ARIA، ناوبری صفحه‌کلید و کنتراست رنگ کافی.
-- **عملکرد بالا**: CSS سبک با متغیرها، SVGهای درون‌خطی، JS مینیمال و بارگذاری سریع.
-- **تایپوگرافی فارسی**: استفاده از فونت وزیر از CDN.
-- **افکت‌های تعاملی**: هاور و ترنزیشن‌های نرم روی دکمه‌ها.
-
-## ساختار پروژه
-
-- `index.html` : فایل HTML اصلی شامل محتوا، SVGها، متاتگ‌ها و اسکریپت تغییر تم
-- `style.css` : فایل CSS شامل طراحی ریسپانسیو و متغیرهای تم
-- `architecture.md` : مستندات معماری و برنامه‌ریزی
-- `examplegif.gif` : پیش‌نمایش متحرک وب‌سایت
-- `.gitignore`
-
-## شخصی‌سازی
-
-### تصویر پروفایل
-
-تصویر پروفایل در حال حاضر روی مسیر زیر تنظیم شده است:
-
-```html
-<img src="pic/profile.png" />
+### اجرای محلی
+1) پایتون ۳ را نصب کنید.  
+2) در ترمینال سیستم خود دستور کلون را اجرا کنید:
+   - macOS/Linux: `git clone https://github.com/AliAshhadi/personal-profile-website.git`
+   - ویندوز (PowerShell): `git clone https://github.com/AliAshhadi/personal-profile-website.git`
+3) وارد پوشه پروژه شوید:
+- macOS/Linux: `cd personal-profile-website`
+- ویندوز (PowerShell): `cd personal-profile-website`
+4) بار اول:
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python -m app.app
 ```
-
-برای تغییر تصویر:
-
-- مسیر `src` را به تصویر دلخواه خود تغییر دهید
-- تصویر را در پوشه `pic/` قرار دهید
-- برش تصویر به‌صورت خودکار و بدون اعوجاج انجام می‌شود (`object-fit: cover`)
-
-### لینک‌های تماس
-
-لینک‌های تماس (تلفن، ایمیل، لینکدین، واتس‌اپ و تلگرام) را از داخل `index.html` ویرایش کنید.
-
-### رنگ‌ها و استایل
-
-برای تغییر رنگ‌ها:
-
-- متغیرهای رنگ در `:root` و `.dark-mode` داخل `style.css`
-- استایل دکمه‌ها در کلاس `.contact-btn`
-
-### تغییر تم پیش‌فرض
-
-در حال حاضر **Dark Mode پیش‌فرض** است. برای پیش‌فرض کردن Light Mode، کلاس زیر را از تگ `<body>` حذف کنید:
-
-```html
-<body class="dark-mode">
+5) دفعات بعد:
+```bash
+source venv/bin/activate   # ویندوز: venv\Scripts\activate
+python -m app.app
 ```
+آدرس http://127.0.0.1:5000 را باز کنید. آیکن‌های پیش‌فرض و آیکن‌های سفارشی شما روی دیسک ذخیره می‌شوند تا بعداً هم در دسترس باشند.
 
-## استفاده
-
-1. فایل `index.html` را در مرورگر باز کنید
-2. نیازی به سرور یا ابزار Build نیست
-3. برای انتشار، پروژه را روی هاست استاتیک (GitHub Pages، Netlify، Vercel و …) قرار دهید
-
-## الزامات
-
-- مرورگر مدرن با پشتیبانی از CSS3 و ES6
-- اینترنت برای بارگذاری فونت وزیر (اختیاری)
-- بدون نیاز به فریمورک یا کتابخانه اضافی
-
-## استقرار
-
-- قابل میزبانی روی GitHub Pages
-- حفظ کدگذاری UTF-8 هنگام آپلود فایل‌ها
-- تست روی موبایل و تبلت توصیه می‌شود
-
-## درباره پروژه
-
-این پروژه توسط **علی اشهدی** با استفاده از VS Code و GitHub Copilot ساخته شده است. استفاده از این قالب برای پروژه‌های شخصی آزاد است.
-
-## اعتبارها
-
-- آیکون‌ها: [RemixIcon](https://remixicon.com/)
+### اعتبارها
+- قالب: aliashhadi/personal-profile-website
+- آیکن‌ها: [RemixIcon](https://remixicon.com/)
+- فونت فارسی: [Vazirmatn](https://rastikerdar.github.io/vazirmatn/)

@@ -148,27 +148,6 @@ h1 {
 }
 
 /* Card footer */
-.card-footer {
-    font-size: 14px;
-    color: var(--footer-color);
-}
-
-.card-footer a {
-    color: var(--link-color);
-    text-decoration: none;
-}
-
-.card-footer a:hover {
-    text-decoration: underline;
-}
-
-.card-footer svg {
-    width: 50px;
-    height: auto;
-    vertical-align: middle;
-    margin-left: 4px;
-}
-
 /* Theme toggle button */
 .theme-toggle {
     position: absolute;

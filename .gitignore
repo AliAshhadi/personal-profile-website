@@ -72,6 +72,9 @@ coverage.xml
 *.cover
 .hypothesis/
 
+# App runtime data
+app/data/
+
 # Local planning docs
 planning.md
 roadmap.md
